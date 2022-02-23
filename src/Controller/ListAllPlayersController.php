@@ -11,25 +11,25 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ListAllPlayersController extends AbstractController
 {
-    public function __construct(PlayerRepository $playerRepository)
-    {
-        $this->playerRepository = $playerRepository;
+  public function __construct(PlayerRepository $playerRepository)
+  {
+    $this->playerRepository = $playerRepository;
+  }
+
+
+  #[Route('/list/all/players', name: 'list_all_players')]
+  public function getAllPlayers(): JsonResponse
+  {
+    $dbPlayersList = $this->playerRepository->findAll();
+    $playerListForConverting = array();
+
+    foreach ($dbPlayersList as $player) {
+      $playerListForConverting[] = $player->buildArray();
     }
-
-
-    #[Route('/list/all/players', name: 'list_all_players')]
-    public function getAllPlayers(): Response
-    {
-        $dbPlayersList = $this->playerRepository->findAll();
-        $playerListForConverting = array();
-
-        foreach($dbPlayersList as $player){
-            $playerListForConverting[] = $player->buildArray();
-          }
-          return new JsonResponse(
-            array(
-              "players" => $playerListForConverting
-            )
-          );
-    }
+    return new JsonResponse(
+      array(
+        "players" => $playerListForConverting
+      )
+    );
+  }
 }

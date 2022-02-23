@@ -34,6 +34,9 @@ class Player
     #[ORM\Column(type: 'integer')]
     private $fighting;
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private $team;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -123,6 +126,18 @@ class Player
         return $this;
     }
 
+    public function getTeam(): ?int
+    {
+        return $this->team;
+    }
+
+    public function setTeam(?int $team): self
+    {
+        $this->team = $team;
+
+        return $this;
+    }
+
     
     public function buildArray(){
         $array = array();
@@ -136,4 +151,6 @@ class Player
   
         return $array;
       }
+
+
 }
