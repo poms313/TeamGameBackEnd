@@ -1,0 +1,17 @@
+# Use the front controller as index file. It serves as a fallback solution when
+# every other rewrite/redirect fails (e.g. in an aliased environment without
+# mod_rewrite). Additionally, this reduces the matching process for the
+# start page (path "/") because otherwise Apache will apply the rewriting rules
+# to each configured DirectoryIndex file (e.g. index.php, index.html, index.pl).
+DirectoryIndex index.php
+RewriteEngine on
+RewriteRule ^(.*) public/$1 
+
+# redirect to https and remove www.
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^ https://team-game.pommine-fillatre.com%{REQUEST_URI} [L,NE,R=301]
+
+#RewriteCond %{HTTP_HOST} ^www.pommine-fillatre.com$
+#RewriteCond %{HTTP_HOST} ^pommine-fillatre.com$
+#RewriteRule (.*) https://pommine-fillatre.com$1 [R=301,L]
