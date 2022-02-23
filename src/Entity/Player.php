@@ -122,4 +122,18 @@ class Player
 
         return $this;
     }
+
+    
+    public function buildArray(){
+        $array = array();
+  
+        $array['name'] = $this->getName();
+        $array['strength'] = $this->getStrength();
+        $array['memory'] = $this->getMemory();
+        $array['logic'] = $this->getLogic();
+        $array['resistance'] = $this->getResistance();
+        $array['fighting'] = $this->getFighting();
+  
+        return $array;
+      }
 }
