@@ -19,7 +19,7 @@ class PlayerController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
-    #[Route('/get/player/{id}', name: 'get_player')]
+    #[Route('/get/player/{id}', name: 'get_player', methods: ['GET'])]
     public function getOnePlayer($id): JsonResponse
     {
 

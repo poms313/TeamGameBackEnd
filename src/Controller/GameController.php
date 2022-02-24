@@ -16,7 +16,7 @@ class GameController extends AbstractController
         $this->playerRepository = $playerRepository;
     }
 
-    #[Route('/game/create', name: 'game_create')]
+    #[Route('/game/create', name: 'game_create', methods: ['GET'])]
     public function createGame(): JsonResponse
     {
         $player = new Player();
