@@ -141,9 +141,10 @@ class Player
     
     public function buildArray(){
         $array = array();
-  
+        $array['id'] = $this->getId();
         $array['name'] = $this->getName();
         $array['strength'] = $this->getStrength();
+        $array['intelligence'] = $this->getIntelligence();
         $array['memory'] = $this->getMemory();
         $array['logic'] = $this->getLogic();
         $array['resistance'] = $this->getResistance();

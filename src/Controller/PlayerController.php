@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Entity\Player;
@@ -19,28 +18,34 @@ class PlayerController extends AbstractController
         $this->doctrine = $doctrine;
     }
 
-    #[Route('/get/player/{id}', name: 'get_player', methods: ['GET'])]
+
+    /**
+     * @Route("/get/player/{id}", methods={"GET"})
+     */
     public function getOnePlayer($id): JsonResponse
     {
-
         $bdPlayer = $this->playerRepository->findOneBy(['id' => $id]);
         if (is_null($bdPlayer)) {
-            $player = 'error';
+            $data = 'error';
         } else {
-            $player = $bdPlayer->buildArray();
+            $data = $bdPlayer->buildArray();
         }
 
         return new JsonResponse(
-            $player
+            $data
         );
     }
 
-    #[Route('/modify/player/{formData}', name: 'modify_player', methods: ['POST'])]
-    public function modifyPlayer($formData): JsonResponse
+    /**
+     * @Route("/modify/{player}", methods={"GET", "POST"})
+     */
+    public function modifyPlayer($player): JsonResponse
     {
-        if (empty($formData)) {
-            $player = 'error';
+        if (empty($player)) {
+            $data = null;
         } else {
+            $formData =  json_decode($player, true);
+
             $playerToModify = new Player();
             $playerToModify = $this->playerRepository->findOneBy(['id' => $formData['id']]);
             $playerToModify->setName($formData['name']);
@@ -52,11 +57,11 @@ class PlayerController extends AbstractController
             $playerToModify->setFighting($formData['fighting']);
             $entityManager = $this->doctrine->getManager();
             $entityManager->flush();
-            $player = $playerToModify->buildArray();;
+            $data = $playerToModify->buildArray();
         }
 
         return new JsonResponse(
-            $player
+            $data
         );
     }
 }

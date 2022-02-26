@@ -15,8 +15,9 @@ class ListAllPlayersController extends AbstractController
     $this->playerRepository = $playerRepository;
   }
 
-
-  #[Route('/list/all/players', name: 'list_all_players', methods: ['GET'])]
+  /**
+   * @Route("/list/all/players", methods={"GET"})
+   */
   public function getAllPlayers(): JsonResponse
   {
     $dbPlayersList = $this->playerRepository->findAll();
@@ -26,9 +27,7 @@ class ListAllPlayersController extends AbstractController
       $playerListForConverting[] = $player->buildArray();
     }
     return new JsonResponse(
-      array(
-        "players" => $playerListForConverting
-      )
+      $playerListForConverting
     );
   }
 }

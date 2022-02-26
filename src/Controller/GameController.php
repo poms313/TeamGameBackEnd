@@ -16,7 +16,9 @@ class GameController extends AbstractController
         $this->playerRepository = $playerRepository;
     }
 
-    #[Route('/game/create', name: 'game_create', methods: ['GET'])]
+    /**
+     * @Route("/game/create", methods={"GET"})
+     */
     public function createGame(): JsonResponse
     {
         $player = new Player();
@@ -41,8 +43,10 @@ class GameController extends AbstractController
         ]);
     }
 
-    #[Route('/game/result/{formData}', name: 'game_result', methods: ['POST'])]
-    public function index($formData): JsonResponse
+    /**
+     * @Route("/game/result/{formData}", methods={"GET", "POST"})
+     */
+    public function gameResult($formData): JsonResponse
     {
         if (empty($formData)) {
             $result = 'error';
