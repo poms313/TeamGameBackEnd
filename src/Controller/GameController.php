@@ -21,20 +21,25 @@ class GameController extends AbstractController
      */
     public function createGame(): JsonResponse
     {
-        $player = new Player();
-        $data = array();
+       $allPlayers = $this->playerRepository->findAll();
+        if (count($allPlayers) >= 10) {
 
-        for ($i = 1; $i <= 3; $i++) {
-            $player = $this->playerRepository->findOneBy(['id' => rand(1, 10)]);
-            $player->setTeam(1);
-            array_push($data, $player->buildArray());
+            $player = new Player();
+            $data = array();
+    
+            for ($i = 1; $i <= 3; $i++) {
+                $player = $this->playerRepository->findOneBy(['id' => rand(1, 10)]);
+                $player->setTeam(1);
+                array_push($data, $player->buildArray());
+            }
+    
+            for ($g = 1; $g <= 3; $g++) {
+                $player = $this->playerRepository->findOneBy(['id' => rand(1, 10)]);
+                $player->setTeam(2);
+                array_push($data, $player->buildArray());
+            }
         }
-
-        for ($g = 1; $g <= 3; $g++) {
-            $player = $this->playerRepository->findOneBy(['id' => rand(1, 10)]);
-            $player->setTeam(2);
-            array_push($data, $player->buildArray());
-        }
+        
 
         return $this->json(
             $data
