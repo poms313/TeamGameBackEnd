@@ -149,7 +149,7 @@ class Player
         $array['logic'] = $this->getLogic();
         $array['resistance'] = $this->getResistance();
         $array['fighting'] = $this->getFighting();
-  
+        $array['team'] = $this->getTeam();
         return $array;
       }
 

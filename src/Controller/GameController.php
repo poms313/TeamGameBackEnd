@@ -22,60 +22,74 @@ class GameController extends AbstractController
     public function createGame(): JsonResponse
     {
         $player = new Player();
+        $data = array();
 
-        $teamOne = array();
         for ($i = 1; $i <= 3; $i++) {
             $player = $this->playerRepository->findOneBy(['id' => rand(1, 10)]);
             $player->setTeam(1);
-            array_push($teamOne, $player->buildArray());
+            array_push($data, $player->buildArray());
         }
 
-        $teamTwo = array();
         for ($g = 1; $g <= 3; $g++) {
             $player = $this->playerRepository->findOneBy(['id' => rand(1, 10)]);
             $player->setTeam(2);
-            array_push($teamTwo, $player->buildArray());
+            array_push($data, $player->buildArray());
         }
 
-        return $this->json([
-            'teamOne' => $teamOne,
-            'teamTwo' => $teamTwo,
-        ]);
+        return $this->json(
+            $data
+        );
     }
 
     /**
-     * @Route("/game/result/{formData}", methods={"GET", "POST"})
+     * @Route("/result/{jsonData}", methods={"GET", "POST"})
      */
-    public function gameResult($formData): JsonResponse
+    public function gameResult($jsonData): JsonResponse
     {
-        if (empty($formData)) {
+        if (empty($jsonData)) {
             $result = 'error';
         } else {
             $teamOne = 0;
             $teamTwo = 0;
-            $critary = $formData['critary'];
 
-            foreach ($formData as $player) {
-                if ($player['team'] = '1') {
-                    $teamOne += $player[$critary];
-                } else {
-                    $teamTwo += $player[$critary];
+            $formData =  json_decode($jsonData, true);
+            $players = $formData['players'];
+            $testName = $formData['testName'];
+
+            foreach ($players as $player) {
+                if ($player['team'] == 1) {
+                    $teamOne += $player[$testName];
+                }
+                if ($player['team'] == 2) {
+                    $teamTwo += $player[$testName];
                 }
             }
 
             if ($teamOne < $teamTwo) {
-                $result = 'teamTwo';
+                $result = array(
+                    'winner'=> 'teamTwo',
+                    'teamOneScore'=> $teamOne,
+                    'teamTwoScore'=> $teamTwo
+                );
             }
 
             if ($teamOne > $teamTwo) {
-                $result = 'teamOne';
+                $result = array(
+                    'winner'=> 'teamOne',
+                    'teamOneScore'=> $teamOne,
+                    'teamTwoScore'=> $teamTwo
+                );
             }
 
             if ($teamOne == $teamTwo) {
-                $result = 'null';
+                $result = array(
+                    'winner'=> 'null',
+                    'teamOneScore'=> $teamOne,
+                    'teamTwoScore'=> $teamTwo
+                );
             }
         }
-        return new JsonResponse(
+        return $this->json(
             $result
         );
     }
